@@ -1,8 +1,8 @@
-#include <Arduino_JSON.h>
-#include <stdio.h>
+#include <ArduinoJson.h>
+
+int id=0;
 
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(115200);
   delay(1000);
 }
@@ -11,15 +11,18 @@ int aleatOUT()
 {
   int rand = esp_random();
   delay(500);
+  id++;
   return (rand);
 
 }
+
 void loop() {
-  // put your main code here, to run repeatedly:
   JsonDocument doc;
   
-  JsonArray numeros = doc["numero"].to<JsonArray()>;
+  JsonArray numeros = doc["numero"].to<JsonArray>();
   numeros.add(aleatOUT());
+  
+  doc["ID"] = id;
 
   serializeJson(doc, Serial);
   Serial.println();

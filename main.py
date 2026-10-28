@@ -1,10 +1,23 @@
 import json
 import serial
 
-ser = serial.Serial('/dev/ttyUSB0', 9600)
+porta = "/dev/ttyUSB0"
+baud = 115200
+
+ser = serial.Serial(porta, baud)
 
 while True:
-    if ser.in_waiting > 0:
-        line = ser.readline().decode('utf-8').rstrip()
-        data = json.loads(line)
-        print(data)
+  if ser.in_waiting > 0:
+    raw_line = ser.readline()
+
+    try:
+      line = raw_line.decode('utf-8', errors='ignore').strip()
+
+      if not line:
+        continue
+
+      data = json.loads(line)
+      print(f"{data.get('numero')}\n ID: {data.get('ID')}")
+
+    except (json.JSONDecodeError, UnicodeDecodeError):
+      pass
