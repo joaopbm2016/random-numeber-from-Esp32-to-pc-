@@ -1,7 +1,7 @@
 import json
 import serial
 
-porta = "/dev/ttyUSB0"
+porta = "/dev/rfcomm"
 baud = 115200
 
 ser = serial.Serial(porta, baud)

@@ -1,9 +1,14 @@
 #include <ArduinoJson.h>
+#include "BluetoothSerial.h"
 
+BluetoothSerial serialBT;
 int id=0;
 
 void setup() {
   Serial.begin(115200);
+  pinMode(LED_BUILTIN, OUTPUT);
+  serialBT.begin("AleatBT");
+  serialBT.discover(true);
   delay(1000);
 }
 
@@ -12,6 +17,7 @@ int aleatOUT()
   int rand = esp_random();
   delay(500);
   id++;
+  digitalWrite(LED_BUILTIN,HIGH);
   return (rand);
 
 }
@@ -24,9 +30,13 @@ void loop() {
   
   doc["ID"] = id;
 
-  serializeJson(doc, Serial);
-  Serial.println();
+  String AleatJson;
 
-  delay(1000);
+  serializeJson(doc, AleatJson);
+  serialBT.println(AleatJson);
+
+  digitalWrite(LED_BUILTIN,LOW);
+
+  delay(500);
   
 }
